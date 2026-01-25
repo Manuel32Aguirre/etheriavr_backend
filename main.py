@@ -1,17 +1,20 @@
+# Cargar variables de entorno
+from dotenv import load_dotenv
+load_dotenv()
+
 import os
 import uvicorn
 from fastapi import FastAPI
-from dotenv import load_dotenv
-from presentation.controllers import user_controller
+from config.connection import engine, Base
+from models.entities.User import User
 
-# Cargar variables de entorno
-load_dotenv()
-
-# Variables obligatorias del entorno
 APP_HOST = os.getenv("APP_HOST")
 APP_PORT = int(os.getenv("APP_PORT"))
 DEBUG_MODE = os.getenv("DEBUG_MODE").lower() == "true"
 
+# --- LÓGICA DDL (Estilo Hibernate Auto) ---
+Base.metadata.drop_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="EtheriaVR Backend",
@@ -19,7 +22,8 @@ app = FastAPI(
     description="API para el sistema de entrenamiento musical en VR"
 )
 
-app.include_router(user_controller.router)
+# Registrar routers
+#app.include_router(user_controller.router)
 
 @app.get("/")
 def root():
