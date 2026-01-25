@@ -1,6 +1,8 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Enum as SQLEnum
 from sqlalchemy.orm import relationship
 from config.connection import Base
+# Import your new Enum
+from models.enums.Tessitura import Tessitura 
 
 class User(Base):
     __tablename__ = "users"
@@ -13,6 +15,6 @@ class User(Base):
     
     password_hash = Column(String(255), nullable=False)
     
-    tessitura = Column(String(50), nullable=True) # Soprano, Tenor, etc.
+    tessitura = Column(SQLEnum(Tessitura), nullable=True)
 
     practice_sessions = relationship("PracticeSession", back_populates="user")
