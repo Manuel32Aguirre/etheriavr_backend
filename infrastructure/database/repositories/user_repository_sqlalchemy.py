@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
-from etheriavr_backend.domain.repositories.IUserRepository import IUserRepository
-from etheriavr_backend.domain.entities.user import User
-from etheriavr_backend.infrastructure.database.models.user_entity import UserEntity
+from domain.repositories.IUserRepository import IUserRepository
+from domain.entities.user import User
+from infrastructure.database.models.user_entity import UserEntity
 
 
 class UserRepositorySQLAlchemy(IUserRepository):

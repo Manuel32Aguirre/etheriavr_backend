@@ -1,7 +1,7 @@
-from etheriavr_backend.domain.repositories.ISongRepository import ISongRepository
-from etheriavr_backend.infrastructure.database.models.song_entity import SongEntity
+from domain.repositories.ISongRepository import ISongRepository
+from infrastructure.database.models.song_entity import SongEntity
 from sqlalchemy.orm import Session
-from etheriavr_backend.domain.entities.song import Song
+from domain.entities.song import Song
 
 class SongRepositorySQLAlchemy(ISongRepository):
     def __init(self, db: Session):

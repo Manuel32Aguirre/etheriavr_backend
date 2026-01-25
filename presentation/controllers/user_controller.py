@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from etheriavr_backend.application.use_cases.RegisterUserUseCase import RegisterUserUseCase
-from etheriavr_backend.infrastructure.database.connection import get_db
-from etheriavr_backend.infrastructure.database.repositories.user_repository_sqlalchemy import UserRepositorySQLAlchemy
-from etheriavr_backend.presentation.controllers.dtos.user_post_dto import RegisterUserDTO
+from application.use_cases.RegisterUserUseCase import RegisterUserUseCase
+from infrastructure.database.connection import get_db
+from infrastructure.database.repositories.user_repository_sqlalchemy import UserRepositorySQLAlchemy
+from presentation.controllers.dtos.user_post_dto import RegisterUserDTO
 
 router = APIRouter(prefix="/users", tags=["Users"])
 

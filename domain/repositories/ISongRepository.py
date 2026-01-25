@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from etheriavr_backend.domain.entities.song import Song
+from domain.entities.song import Song
 
 class ISongRepository(ABC):
 

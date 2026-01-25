@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
-from etheriavr_backend.infrastructure.database.connection import Base
+from infrastructure.database.connection import Base
 
 class ArtistEntity(Base):
     __tablename__ = "artist"

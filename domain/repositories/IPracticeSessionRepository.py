@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from etheriavr_backend.domain.entities.practice_session import PracticeSession
+from domain.entities.practice_session import PracticeSession
 
 class IPracticeSessionRepository(ABC):
 

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from etheriavr_backend.domain.entities.user import User
+from domain.entities.user import User
 
 class IUserRepository(ABC):
 

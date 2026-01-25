@@ -1,25 +1,30 @@
-"""
-Punto de entrada principal del servidor EtheriaVR Backend.
-Este servidor provee APIs REST para la gestión de usuarios, canciones, artistas y sesiones de práctica.
-"""
+import os
 import uvicorn
 from fastapi import FastAPI
-from etheriavr_backend.presentation.controllers import user_controller
+from dotenv import load_dotenv
+from presentation.controllers import user_controller
+
+# Cargar variables de entorno
+load_dotenv()
+
+# Variables obligatorias del entorno
+APP_HOST = os.getenv("APP_HOST")
+APP_PORT = int(os.getenv("APP_PORT"))
+DEBUG_MODE = os.getenv("DEBUG_MODE").lower() == "true"
+
 
 app = FastAPI(
     title="EtheriaVR Backend",
     version="1.0",
-    description="API Backend para EtheriaVR - Sistema de aprendizaje musical en VR"
+    description="API para el sistema de entrenamiento musical en VR"
 )
 
-# Registrar routers
 app.include_router(user_controller.router)
 
 @app.get("/")
 def root():
     return {
-        "message": "Servidor EtheriaVR Backend activo",
-        "version": "1.0",
+        "message": "Servidor EtheriaVR activo",
         "status": "running"
     }
 
@@ -27,23 +32,14 @@ def root():
 def health_check():
     return {"status": "healthy"}
 
-
 def main():
-    """Inicia el servidor FastAPI"""
-    print("=" * 50)
-    print("Iniciando EtheriaVR Backend Server")
-    print("=" * 50)
-    print("API disponible en: http://localhost:8000")
-    print("Documentación en: http://localhost:8000/docs")
-    print("=" * 50)
-    
+    # El comando "main:app" permite que el reload funcione correctamente en Docker
     uvicorn.run(
-        app,
-        host="0.0.0.0",
-        port=8000,
-        reload=True  # Activar auto-reload para desarrollo
+        "main:app", 
+        host=APP_HOST,
+        port=APP_PORT,
+        reload=DEBUG_MODE
     )
-
 
 if __name__ == "__main__":
     main()

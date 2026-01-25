@@ -1,4 +1,5 @@
 services:
+  # Tu base de datos (ya la tienes bien)
   etheriavr_db:
     image: mysql:8.0
     container_name: etheriavr_db
@@ -12,5 +13,17 @@ services:
     ports: 
       - "3308:3306"
     restart: always
+
+  # Tu API de FastAPI
+  etheriavr_api:
+    build: . # Le dice: "Busca el Dockerfile en esta misma carpeta"
+    container_name: etheriavr_api
+    env_file: .env # Lee automáticamente tu archivo .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - etheriavr_db # No arranca la API hasta que la DB esté lista
+    restart: always
+
 volumes:
   etherivr_db_data:

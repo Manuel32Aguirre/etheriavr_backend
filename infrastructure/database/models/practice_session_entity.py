@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, ForeignKey, DateTime, Enum, Numeric
 from sqlalchemy.orm import relationship
-from etheriavr_backend.infrastructure.database.connection import Base
+from infrastructure.database.connection import Base
 import enum
 
 class PracticeMode(str, enum.Enum):

@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Enum, ForeignKey
 from sqlalchemy.orm import relationship
-from etheriavr_backend.infrastructure.database.connection import Base
+from infrastructure.database.connection import Base
 import enum
 
 class AudienceIntensity(str, enum.Enum):

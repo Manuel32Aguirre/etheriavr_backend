@@ -1,7 +1,7 @@
-from etheriavr_backend.domain.entities.practice_session import PracticeSession
-from etheriavr_backend.domain.repositories.IPracticeSessionRepository import IPracticeSessionRepository
+from domain.entities.practice_session import PracticeSession
+from domain.repositories.IPracticeSessionRepository import IPracticeSessionRepository
 from sqlalchemy.orm import Session
-from etheriavr_backend.infrastructure.database.models.practice_session_entity import PracticeSessionEntity
+from infrastructure.database.models.practice_session_entity import PracticeSessionEntity
 
 class PracticeSessionRepositorySQLAlchemy(IPracticeSessionRepository):
 

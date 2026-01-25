@@ -1,5 +1,5 @@
-from etheriavr_backend.domain.entities.user import User
-from etheriavr_backend.domain.repositories.IUserRepository import IUserRepository
+from domain.entities.user import User
+from domain.repositories.IUserRepository import IUserRepository
 
 class RegisterUserUseCase: 
 
