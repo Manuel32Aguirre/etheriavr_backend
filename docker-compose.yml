@@ -1,14 +1,16 @@
-version: "3.8"
-
 services:
-  db:
-    image: mysql:latest
-    container_name: etheriavr_container
+  etheriavr_db:
+    image: mysql:8.0
+    container_name: etheriavr_db
     environment: 
-      MYSQL_ROOT_PASSWORD: 12345678
-      MYSQL_DATABASE: etheriavr_db
-      MYSQL_USER: manuel
-      MYSQL_PASSWORD: 1234
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - etherivr_db_data:/var/lib/mysql
     ports: 
       - "3308:3306"
     restart: always
+volumes:
+  etherivr_db_data:
