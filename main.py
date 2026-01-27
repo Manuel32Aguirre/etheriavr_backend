@@ -4,6 +4,9 @@ load_dotenv()
 import os
 import uvicorn
 from fastapi import FastAPI
+# ESTA ES LA LÍNEA QUE TE FALTA:
+from fastapi.middleware.cors import CORSMiddleware 
+
 from config.connection import engine, Base
 from controllers import UserController
 
@@ -17,6 +20,15 @@ app = FastAPI(
     title="EtheriaVR Backend",
     version="1.0",
     description="API para el sistema de entrenamiento musical en VR"
+)
+
+# Ahora sí, el middleware funcionará sin errores
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(UserController.router)
