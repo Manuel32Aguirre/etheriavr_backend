@@ -19,6 +19,7 @@ engine = create_engine(
     pool_pre_ping=True
 )
 
+#Es como el EntityManager de JPA
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
