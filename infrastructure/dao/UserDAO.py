@@ -1,5 +1,7 @@
 from sqlalchemy.orm import Session
 from models.entities.User import User
+from models.entities.Artist import Artist
+from models.entities.Song import Song
 
 class UserDAO:
     def __init__(self, db: Session):

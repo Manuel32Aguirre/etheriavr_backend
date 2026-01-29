@@ -38,12 +38,3 @@ class UserMapper:
             email=entity.email,
             tessitura=entity.tessitura
         )
-
-    # --- DE ENTIDAD A RESPONSE (PERFIL PÚBLICO) ---
-    @staticmethod
-    def toPublicDto(entity: User):
-        """Si otro usuario quiere ver el perfil (ocultamos el email por privacidad)"""
-        return {
-            "username": entity.username,
-            "tessitura": entity.tessitura
-        }

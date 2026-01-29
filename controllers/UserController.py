@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 from config.connection import obtenerBD
-# Asegúrate de importar estos nuevos DTOs
 from models.dto.request.UserCreateRequest import UserCreateRequest
 from models.dto.request.UserLoginRequest import UserLoginRequest
 from models.dto.response.UserCreateResponse import UserCreateResponse
