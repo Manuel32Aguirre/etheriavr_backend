@@ -11,24 +11,13 @@ services:
     volumes:
       - etherivr_db_data:/var/lib/mysql
     ports: 
-      - "3308:3306"
+      - "${DB_PORT}:3306"
     restart: always
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${MYSQL_USER}", "--password=${MYSQL_PASSWORD}"]
       interval: 5s
       timeout: 5s
       retries: 10
-
-  etheriavr_api:
-    build: .
-    container_name: etheriavr_api
-    env_file: .env
-    ports:
-      - "8000:8000"
-    depends_on:
-      etheriavr_db:
-        condition: service_healthy
-    restart: always
 
 volumes:
   etherivr_db_data:

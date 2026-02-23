@@ -1,6 +1,7 @@
 from sqlalchemy import text # Importante para ejecutar SQL puro
 from config.connection import engine, Base, SessionLocal # <--- Agrega SessionLocal aquí
 from dotenv import load_dotenv
+from config.broadcast_service import start_udp_beacon
 load_dotenv()
 
 import os
@@ -72,6 +73,7 @@ def health_check():
     return {"status": "healthy"}
 
 def main():
+    start_udp_beacon(APP_PORT)
     uvicorn.run(
         "main:app", 
         host=APP_HOST,
