@@ -6,7 +6,7 @@ INSERT INTO artists (id, name) VALUES (7, 'Ludwig van Beethoven');
 
 INSERT INTO songs (musical_genre, musical_key, title, duration, mode, tempo, file_path, artist_id) 
 VALUES 
-('Rock', 'Bb', 'Bohemian Rhapsody', 354, 'CANTO', 72, 'songs/bohemian.midi', 3),
+('Synth-Pop', 'A', 'Take On Me', 229, 'CANTO', 169, 'songs/bohemian.midi', 3),
 ('Clásica', 'Eb', 'Nocturne Op. 9 No. 2', 270, 'PIANO', 60, 'songs/nocturne.midi', 4),
 ('Pop', 'F#m', 'Billie Jean', 294, 'CANTO', 117, 'songs/billiejean.midi', 5),
 ('Jazz', 'Ebm', 'Take Five', 324, 'PIANO', 174, 'songs/takefive.midi', 6),
