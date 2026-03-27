@@ -10,7 +10,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware 
 
 from config.connection import engine, Base
-from controllers import UserController, SongController
+from controllers import UserController, SongController, UserConfigurationController, PracticeSessionController
 
 APP_HOST = os.getenv("APP_HOST")
 APP_PORT = int(os.getenv("APP_PORT"))
@@ -60,6 +60,9 @@ app.add_middleware(
 
 app.include_router(UserController.router)
 app.include_router(SongController.router) # <--- ¡ESTA ES LA CLAVE!
+app.include_router(UserConfigurationController.router)
+app.include_router(PracticeSessionController.router)
+
 
 @app.get("/")
 def root():

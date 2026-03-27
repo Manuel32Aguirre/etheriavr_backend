@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional
+from models.dto.response.UserConfigurationResponse import UserConfigurationResponse
 
 class UserLoginResponse(BaseModel):
     access_token: str
@@ -9,3 +10,4 @@ class UserLoginResponse(BaseModel):
     username: str
     email: str
     tessitura: Optional[str] = None
+    configuration: Optional[UserConfigurationResponse] = None

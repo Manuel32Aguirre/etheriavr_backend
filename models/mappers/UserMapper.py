@@ -3,6 +3,7 @@ from models.dto.request.UserCreateRequest import UserCreateRequest
 from models.dto.response.UserCreateResponse import UserCreateResponse
 from core.security import get_password_hash
 from models.dto.response.UserLoginResponse import UserLoginResponse
+from models.mappers.UserConfigurationMapper import UserConfigurationMapper
 
 class UserMapper:
 
@@ -24,7 +25,8 @@ class UserMapper:
             id=entity.id,
             username=entity.username,
             email=entity.email,
-            tessitura=entity.tessitura
+            tessitura=entity.tessitura,
+            configuration=UserConfigurationMapper.toDto(entity.user_configuration)
         )
     
 # --- DE ENTIDAD A RESPONSE (LOGIN) ---
@@ -36,5 +38,6 @@ class UserMapper:
             id=entity.id,
             username=entity.username,
             email=entity.email,
-            tessitura=entity.tessitura
+            tessitura=entity.tessitura,
+            configuration=UserConfigurationMapper.toDto(entity.user_configuration)
         )

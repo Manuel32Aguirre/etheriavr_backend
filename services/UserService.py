@@ -9,6 +9,7 @@ from core.security import verify_password, create_access_token # Asumiendo que t
 from models.dto.response.UserLoginResponse import UserLoginResponse
 from models.dto.request.UserLoginRequest import UserLoginRequest
 from models.mappers.UserMapper import UserMapper
+from models.mappers.UserConfigurationMapper import UserConfigurationMapper
 
 class UserService:
     def __init__(self, db: Session):
@@ -25,6 +26,7 @@ class UserService:
         # 2. Hashear y Mapear a Entidad
         pwd_hash = get_password_hash(request.password)
         usuarioEntity = UserMapper.toEntity(request, pwd_hash)
+        usuarioEntity.user_configuration = UserConfigurationMapper.toEntity(request)
 
         # 3. Guardar
         usuarioSaved = self.usuarioDao.save(usuarioEntity)

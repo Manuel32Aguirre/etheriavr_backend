@@ -6,6 +6,6 @@ INSERT INTO artists (id, name) VALUES (4, 'Elton John');
 INSERT INTO songs (musical_genre, musical_key, title, duration, mode, tempo, file_path, artist_id) 
 VALUES 
 ('Synth-Pop', 'A', 'Take On Me', 229, 'CANTO', 169, 'songs/bohemian.midi', 1),
-('Rock', 'C', 'Unchained melody', 229, 'PIANO', 169, 'songs/unchainedmelody.json', 2);
-('Rock', 'C', 'Let it be', 229, 'PIANO', 169, 'songs/letitbe.json', 3);
+('Rock', 'C', 'Unchained melody', 229, 'PIANO', 169, 'songs/unchainedmelody.json', 2),
+('Rock', 'C', 'Let it be', 229, 'PIANO', 169, 'songs/letitbe.json', 3),
 ('Rock', 'Gm', 'Rocketman', 229, 'PIANO', 169, 'songs/rocketman.json', 4);

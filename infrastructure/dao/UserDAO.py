@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from models.entities.User import User
 from models.entities.Artist import Artist
 from models.entities.Song import Song
@@ -14,7 +14,7 @@ class UserDAO:
         return user
 
     def getByEmail(self, email: str) -> User:
-        return self.db.query(User).filter(User.email == email).first()
+        return self.db.query(User).options(joinedload(User.user_configuration)).filter(User.email == email).first()
 
     def getById(self, user_id: int) -> User:
-        return self.db.query(User).filter(User.id == user_id).first()
+        return self.db.query(User).options(joinedload(User.user_configuration)).filter(User.id == user_id).first()

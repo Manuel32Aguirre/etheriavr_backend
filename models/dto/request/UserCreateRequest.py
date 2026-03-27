@@ -1,10 +1,14 @@
+from typing import Optional
 from pydantic import BaseModel, EmailStr, Field, model_validator, field_validator
+from models.enums.AudienceIntensity import AudienceIntensity
 
 class UserCreateRequest(BaseModel):
     username: str = Field(..., min_length=5, max_length=20, example="usuario123")
     email: EmailStr = Field(..., example="usuario@dominio.com")
     password: str = Field(..., min_length=8, example="Password123")
     confirm_password: str = Field(..., min_length=8, example="Password123")
+    midi_device_name: Optional[str] = Field(default=None, max_length=255, example="Yamaha P-125")
+    audience_intensity: AudienceIntensity = Field(default=AudienceIntensity.MEDIO, example="Medio")
     
     @field_validator('username')
     @classmethod

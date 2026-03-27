@@ -12,4 +12,10 @@ class User(Base):
     password_hash = Column(String(255), nullable=False)
     tessitura = Column(SQLEnum(Tessitura), nullable=True)
 
-    #practice_sessions = relationship("PracticeSession", back_populates="user")
+    user_configuration = relationship(
+        "UserConfiguration",
+        back_populates="user",
+        uselist=False,
+        cascade="all, delete-orphan"
+    )
+    practice_sessions = relationship("PracticeSession", back_populates="user")
