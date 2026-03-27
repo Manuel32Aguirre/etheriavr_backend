@@ -10,8 +10,5 @@ VALUES
 ('Rock', 'G', 'Matenme Porque Me Muero', 229, 'CANTO', 170, 'songs/matenme_porque_me_muero', 5),
 ('Rock', 'C', 'Unchained melody', 229, 'PIANO', 169, 'songs/unchainedmelody.json', 2);
 ('Rock', 'C', 'Let it be', 229, 'PIANO', 169, 'songs/letitbe.json', 3);
-('Synth-Pop', 'A', 'Take On Me', 229, 'CANTO', 169, 'songs/bohemian.midi', 1),
-('Rock', 'C', 'Unchained melody', 229, 'PIANO', 169, 'songs/unchainedmelody.json', 2),
-('Rock', 'C', 'Let it be', 229, 'PIANO', 169, 'songs/letitbe.json', 3),
-('Rock', 'Gm', 'Rocketman', 229, 'PIANO', 169, 'songs/rocketman.json', 4);
+('Synth-Pop', 'A', 'Take On Me', 229, 'CANTO', 169, 'songs/bohemian.midi', 1);
 
