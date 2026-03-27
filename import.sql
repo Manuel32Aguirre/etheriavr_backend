@@ -8,7 +8,7 @@ INSERT INTO songs (musical_genre, musical_key, title, duration, mode, tempo, fil
 VALUES 
 ('Synth-Pop', 'A', 'Take On Me', 229, 'CANTO', 169, 'songs/take_on_me', 1),
 ('Rock', 'G', 'Matenme Porque Me Muero', 229, 'CANTO', 170, 'songs/matenme_porque_me_muero', 5),
-('Rock', 'C', 'Unchained melody', 229, 'PIANO', 169, 'songs/unchainedmelody.json', 2);
-('Rock', 'C', 'Let it be', 229, 'PIANO', 169, 'songs/letitbe.json', 3);
+('Rock', 'C', 'Unchained melody', 229, 'PIANO', 169, 'songs/unchainedmelody.json', 2),
+('Rock', 'C', 'Let it be', 229, 'PIANO', 169, 'songs/letitbe.json', 3),
 ('Synth-Pop', 'A', 'Take On Me', 229, 'CANTO', 169, 'songs/bohemian.midi', 1);
 
