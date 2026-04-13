@@ -18,4 +18,4 @@ INSERT INTO songs (musical_genre, musical_key, title, duration, mode, tempo, fil
 ('Pop', 'Bm', 'Rosa Pastel', 212, 'CANTO', 128, 'songs/rosa_pastel', 6),
 ('Rock', 'C', 'Unchained melody', 229, 'PIANO', 169, 'songs/unchainedmelody.json', 2),
 ('Jazz', 'C', 'Dream a Little Dream', 213, 'CANTO', 77, 'songs/dream_a_little_dream', 7),
-('Rock', 'D', 'Persiana Americana', 297, 'PIANO', 101, 'songs/persianaamericana.json', 9),
+('Rock', 'D', 'Persiana Americana', 297, 'PIANO', 101, 'songs/persianaamericana.json', 9);
