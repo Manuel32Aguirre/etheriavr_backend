@@ -13,6 +13,7 @@ class PracticeSessionService:
         self.practiceSessionDao = PracticeSessionDAO(db)
         self.userDao = UserDAO(db)
         self.songDao = SongDAO(db)
+        self.db = db
 
     def registrarSesionPractica(self, request: PracticeSessionCreateRequest) -> PracticeSessionResponse:
         usuario = self.userDao.getById(request.user_id)
@@ -32,3 +33,30 @@ class PracticeSessionService:
         sesionEntity = PracticeSessionMapper.toEntity(request)
         sesionGuardada = self.practiceSessionDao.save(sesionEntity)
         return PracticeSessionMapper.toDto(sesionGuardada)
+    
+
+    # En PracticeSessionService.py
+    def obtenerSesionesPorUsuario(self, user_id: int):
+        from models.entities.PracticeSession import PracticeSession
+        from models.entities.Song import Song
+
+        results = self.db.query(PracticeSession, Song.title).\
+            join(Song, PracticeSession.song_id == Song.id).\
+            filter(PracticeSession.user_id == user_id).all()
+        
+        sesiones = []
+        for practice, song_title in results:
+            sesiones.append({
+                "id": practice.id,
+                "user_id": practice.user_id,  # <--- AGREGA ESTA LÍNEA
+                "song_id": practice.song_id,
+                "song_title": song_title,
+                "practice_datetime": practice.practice_datetime.strftime("%Y-%m-%d %H:%M:%S"),
+                "practice_mode": practice.practice_mode,
+                "rhythm_score": practice.rhythm_score,
+                "tuning_score": practice.tuning_score,
+                "harmony_score": practice.harmony_score,
+                "global_score": (practice.rhythm_score + practice.tuning_score) / 2
+            })
+        
+        return sesiones
