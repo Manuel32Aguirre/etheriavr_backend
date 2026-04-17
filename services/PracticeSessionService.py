@@ -46,17 +46,22 @@ class PracticeSessionService:
         
         sesiones = []
         for practice, song_title in results:
+            # Calcular global_score manejando valores None
+            rhythm = practice.rhythm_score or 0
+            tuning = practice.tuning_score or 0
+            global_score = (rhythm + tuning) / 2 if (practice.rhythm_score is not None or practice.tuning_score is not None) else None
+            
             sesiones.append({
                 "id": practice.id,
-                "user_id": practice.user_id,  # <--- AGREGA ESTA LÍNEA
+                "user_id": practice.user_id,
                 "song_id": practice.song_id,
                 "song_title": song_title,
                 "practice_datetime": practice.practice_datetime.strftime("%Y-%m-%d %H:%M:%S"),
-                "practice_mode": practice.practice_mode,
+                "practice_mode": practice.practice_mode.value,
                 "rhythm_score": practice.rhythm_score,
                 "tuning_score": practice.tuning_score,
                 "harmony_score": practice.harmony_score,
-                "global_score": (practice.rhythm_score + practice.tuning_score) / 2
+                "global_score": global_score
             })
         
         return sesiones

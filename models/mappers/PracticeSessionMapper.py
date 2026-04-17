@@ -23,6 +23,7 @@ class PracticeSessionMapper:
             id=entity.id,
             user_id=entity.user_id,
             song_id=entity.song_id,
+            song_title=entity.song.title,
             practice_datetime=entity.practice_datetime,
             practice_mode=entity.practice_mode.value,
             rhythm_score=entity.rhythm_score,
