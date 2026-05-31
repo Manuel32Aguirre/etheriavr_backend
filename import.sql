@@ -11,7 +11,6 @@ INSERT INTO artists (id, name) VALUES (10, 'Coldplay');
 INSERT INTO songs (musical_genre, musical_key, title, duration, mode, tempo, file_path, artist_id) VALUES 
 ('Synth-Pop', 'A', 'Take On Me', 229, 'CANTO', 169, 'songs/take_on_me', 1),
 ('Rock', 'F', 'The scientist', 260, 'PIANO', 73, 'songs/thescientist.json', 10),
-('Rock', 'G', 'Matenme Porque Me Muero', 229, 'CANTO', 170, 'songs/matenme_porque_me_muero', 5),
 ('Rock', 'Bm', 'De musica ligera', 205, 'PIANO', 123, 'songs/demusicaligera.json', 9),
 ('Punk', 'Fm', 'Boulevard Of Broken Dreams', 167, 'CANTO', 170, 'songs/boulevard_of_broken_dreams', 8),
 ('Rock', 'Gm', 'Rocketman', 290, 'PIANO', 136, 'songs/rocketman.json', 4),
