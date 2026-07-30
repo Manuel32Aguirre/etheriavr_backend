@@ -12,9 +12,17 @@ from fastapi.middleware.cors import CORSMiddleware
 from config.connection import engine, Base
 from controllers import UserController, SongController, UserConfigurationController, PracticeSessionController
 
+
+def _as_bool(value, default=False):
+    if value is None:
+        return default
+    return str(value).strip().lower() in {"1", "true", "yes", "on"}
+
 APP_HOST = os.getenv("APP_HOST")
 APP_PORT = int(os.getenv("APP_PORT"))
-DEBUG_MODE = os.getenv("DEBUG_MODE").lower() == "true"
+DEBUG_MODE = _as_bool(os.getenv("DEBUG_MODE"), default=False)
+IS_DEPLOYMENT = _as_bool(os.getenv("IS_DEPLOYMENT"), default=False)
+ENABLE_UDP_BEACON = _as_bool(os.getenv("ENABLE_UDP_BEACON"), default=not IS_DEPLOYMENT)
 
 Base.metadata.create_all(bind=engine)
 
@@ -76,7 +84,11 @@ def health_check():
     return {"status": "healthy"}
 
 def main():
-    start_udp_beacon(APP_PORT)
+    if ENABLE_UDP_BEACON:
+        start_udp_beacon(APP_PORT)
+    else:
+        print("[Startup] UDP beacon deshabilitado por configuracion de despliegue.")
+
     uvicorn.run(
         "main:app", 
         host=APP_HOST,

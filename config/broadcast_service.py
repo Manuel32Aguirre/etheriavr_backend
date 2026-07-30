@@ -6,6 +6,12 @@ from dotenv import load_dotenv
 # Cargamos las variables del archivo .env
 load_dotenv()
 
+
+def _as_bool(value, default=False):
+    if value is None:
+        return default
+    return str(value).strip().lower() in {"1", "true", "yes", "on"}
+
 def get_all_local_ips():
     """Obtiene todas las IPs locales de todas las interfaces de red"""
     ips = []
@@ -43,8 +49,15 @@ def get_matching_ip(client_addr, available_ips):
         return available_ips[0] if available_ips else "127.0.0.1"
 
 def start_udp_beacon(api_port):
+    # Proteccion adicional por si se invoca desde otro punto del codigo.
+    is_deployment = _as_bool(os.getenv("IS_DEPLOYMENT"), default=False)
+    enable_udp_beacon = _as_bool(os.getenv("ENABLE_UDP_BEACON"), default=not is_deployment)
+    if not enable_udp_beacon:
+        print("[UDP Beacon] Deshabilitado por configuracion.")
+        return
+
     # Usamos os.getenv(VARIABLE, VALOR_POR_DEFECTO)
-    UDP_PORT = int(os.getenv("UDP_PORT"))
+    UDP_PORT = int(os.getenv("UDP_PORT", "8888"))
     MAGIC_WORD = os.getenv("MAGIC_WORD")
     SERVER_ID = os.getenv("SERVER_IDENTIFIER")
 

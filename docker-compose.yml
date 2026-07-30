@@ -19,5 +19,17 @@ services:
       timeout: 5s
       retries: 10
 
+  api:
+    build: .
+    container_name: etheriavr_api
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    depends_on:
+      etheriavr_db:
+        condition: service_healthy
+    env_file:
+      - .env
+    restart: always
+
 volumes:
   etherivr_db_data:
