@@ -3,4 +3,5 @@ from pydantic import BaseModel, EmailStr, Field
 
 class EmailVerificationRequest(BaseModel):
     email: EmailStr
-    code: str = Field(..., pattern=r"^\d{6}$")
+    token: str = Field(..., min_length=20, max_length=200)
+

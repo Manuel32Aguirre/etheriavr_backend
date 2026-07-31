@@ -1,11 +1,11 @@
 from html import escape
 from typing import Optional
 
-from fastapi import APIRouter, Depends, Form, status, HTTPException
+from fastapi import APIRouter, Depends, status, HTTPException
 from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
 from config.connection import obtenerBD
-from models.entities.User import User  # IMPORTANTE: Asegúrate de que esta ruta sea correcta
+from models.entities.User import User
 from models.dto.request.UserCreateRequest import UserCreateRequest
 from models.dto.request.UserTessituraRequest import UserTessituraRequest
 from models.dto.request.UserLoginRequest import UserLoginRequest
@@ -19,10 +19,12 @@ from core.security import get_current_user
 # Usamos un solo router para no causar conflictos de prefijos
 router = APIRouter(prefix="/api", tags=["Users"])
 
+
 @router.post("/users", response_model=UserCreateResponse, status_code=status.HTTP_201_CREATED)
 def register(request: UserCreateRequest, db: Session = Depends(obtenerBD)):
     usuarioServicio = UserService(db)
     return usuarioServicio.registrarUsuario(request)
+
 
 @router.post("/login", response_model=UserLoginResponse)
 def login(request: UserLoginRequest, db: Session = Depends(obtenerBD)):
@@ -44,16 +46,27 @@ def resend_email_verification(
 ):
     usuarioServicio = UserService(db)
     usuarioServicio.reenviarCodigoConfirmacion(request.email)
-    return {"message": "Si existe una cuenta pendiente, se envió un nuevo código de confirmación."}
+    return {"message": "Si existe una cuenta pendiente, se envió un nuevo enlace de confirmación."}
 
 
-def _verification_page(email: str = "", message: str = "", is_error: bool = False) -> str:
-    safe_email = escape(email, quote=True)
+def _result_page(
+    ok: bool,
+    title: str,
+    message: str,
+    email: str = "",
+) -> str:
+    safe_title = escape(title)
     safe_message = escape(message)
-    message_html = ""
-    if message:
-        message_class = "error" if is_error else "success"
-        message_html = f'<p class="{message_class}">{safe_message}</p>'
+    if ok:
+        box_color = "#dcfce7"
+        text_color = "#14532d"
+        icon = "✅"
+        border = "#16a34a"
+    else:
+        box_color = "#fee2e2"
+        text_color = "#7f1d1d"
+        icon = "⚠️"
+        border = "#dc2626"
 
     return f"""
     <!DOCTYPE html>
@@ -66,44 +79,30 @@ def _verification_page(email: str = "", message: str = "", is_error: bool = Fals
             * {{ box-sizing: border-box; }}
             body {{
                 margin: 0; min-height: 100vh; display: grid; place-items: center;
-                background: linear-gradient(135deg, #101827, #33245e);
+                background: radial-gradient(circle at 50% 10%, #33245e 0%, #101827 60%);
                 color: #e5e7eb; font-family: Arial, sans-serif; padding: 24px;
             }}
             main {{
-                width: min(100%, 420px); background: rgba(17, 24, 39, .96);
-                border: 1px solid #5b4b8a; border-radius: 16px; padding: 32px;
-                box-shadow: 0 24px 60px rgba(0, 0, 0, .35);
+                width: min(100%, 440px); background: rgba(17, 24, 39, .96);
+                border: 1px solid #5b4b8a; border-radius: 20px; padding: 40px 32px;
+                box-shadow: 0 24px 60px rgba(0, 0, 0, .45); text-align: center;
             }}
-            h1 {{ margin-top: 0; font-size: 26px; }}
-            p {{ color: #cbd5e1; line-height: 1.5; }}
-            label {{ display: block; font-size: 14px; margin: 18px 0 6px; }}
-            input {{
-                width: 100%; padding: 12px; border: 1px solid #64748b; border-radius: 8px;
-                background: #0f172a; color: #f8fafc; font-size: 16px;
+            .icon {{ font-size: 56px; line-height: 1; margin-bottom: 8px; }}
+            h1 {{ margin: 8px 0 12px; font-size: 24px; color: #ffffff; }}
+            .box {{
+                margin-top: 20px; padding: 14px 16px; border-radius: 12px;
+                background: {box_color}; color: {text_color};
+                border: 1px solid {border}; font-size: 15px; line-height: 1.5; text-align: left;
             }}
-            input[name="code"] {{ letter-spacing: 7px; text-align: center; font-weight: bold; }}
-            button {{
-                width: 100%; border: 0; border-radius: 8px; margin-top: 24px; padding: 13px;
-                background: #8b5cf6; color: white; cursor: pointer; font-size: 16px; font-weight: bold;
-            }}
-            button:hover {{ background: #7c3aed; }}
-            .success, .error {{ padding: 10px; border-radius: 8px; }}
-            .success {{ background: #14532d; color: #dcfce7; }}
-            .error {{ background: #7f1d1d; color: #fee2e2; }}
+            small {{ color: #9ca3af; display: block; margin-top: 20px; font-size: 13px; }}
         </style>
     </head>
     <body>
         <main>
-            <h1>Confirma tu correo</h1>
-            <p>Escribe el código de seis dígitos enviado a tu correo electrónico.</p>
-            {message_html}
-            <form method="post" action="/api/verify-email">
-                <label for="email">Correo electrónico</label>
-                <input id="email" name="email" type="email" value="{safe_email}" required>
-                <label for="code">Código de confirmación</label>
-                <input id="code" name="code" type="text" inputmode="numeric" pattern="[0-9]{{6}}" maxlength="6" required autofocus>
-                <button type="submit">Confirmar correo</button>
-            </form>
+            <div class="icon">{icon}</div>
+            <h1>{safe_title}</h1>
+            <div class="box">{safe_message}</div>
+            <small>EtheriaVR · Confirmación de cuenta · {email}</small>
         </main>
     </body>
     </html>
@@ -111,33 +110,55 @@ def _verification_page(email: str = "", message: str = "", is_error: bool = Fals
 
 
 @router.get("/verify-email", response_class=HTMLResponse, include_in_schema=False)
-def verify_email_page(email: Optional[str] = None):
-    return HTMLResponse(_verification_page(email or ""))
-
-
-@router.post("/verify-email", response_class=HTMLResponse, include_in_schema=False)
-def submit_verify_email_page(
-    email: str = Form(...),
-    code: str = Form(...),
+def verify_email_page(
+    email: Optional[str] = None,
+    token: Optional[str] = None,
     db: Session = Depends(obtenerBD),
 ):
+    if not email or not token:
+        return HTMLResponse(
+            _result_page(
+                False,
+                "Enlace incompleto",
+                "El enlace de confirmación es inválido o está incompleto. Revisa tu correo.",
+            ),
+            status_code=status.HTTP_400_BAD_REQUEST,
+        )
+
     try:
-        request = EmailVerificationRequest(email=email, code=code)
+        request = EmailVerificationRequest(email=email, token=token)
         UserService(db).verificarCorreo(request)
         return HTMLResponse(
-            _verification_page(email, "Tu correo ha sido confirmado. Ya puedes iniciar sesión."),
+            _result_page(
+                True,
+                "¡Correo confirmado!",
+                "Tu cuenta ha sido verificada con éxito. Ya puedes cerrar esta "
+                "página e iniciar sesión en EtheriaVR.",
+                email,
+            ),
             status_code=status.HTTP_200_OK,
         )
     except HTTPException as exc:
         return HTMLResponse(
-            _verification_page(email, str(exc.detail), is_error=True),
+            _result_page(
+                False,
+                "No se pudo confirmar",
+                str(exc.detail),
+                email,
+            ),
             status_code=exc.status_code,
         )
     except ValueError:
         return HTMLResponse(
-            _verification_page(email, "Introduce un correo y un código de seis dígitos válidos.", is_error=True),
+            _result_page(
+                False,
+                "Enlace inválido",
+                "El enlace de confirmación no es válido.",
+                email,
+            ),
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         )
+
 
 # El endpoint de tessitura bajo el prefijo /api/users
 @router.put("/users/{user_id}/tessitura")
@@ -149,14 +170,14 @@ async def update_tessitura(
 ):
     # 1. Buscar al usuario en la base de datos usando la entidad User
     user = db.query(User).filter(User.id == user_id).first()
-    
+
     if not user:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
 
     # 2. Mapeo de nombres para que coincidan con el ENUM de MySQL
     # Unity manda strings como "Baritono" o "Bajo", MySQL espera "BARITONE" o "BASS"
     tessitura_mapeada = request.tessitura.upper()
-    
+
     # Mapeos específicos si es necesario
     mapeo = {
         "BARITONO": "BARITONE",
@@ -166,7 +187,7 @@ async def update_tessitura(
         "SOPRANO": "SOPRANO",
         "TENOR": "TENOR"
     }
-    
+
     # Si el valor está en el mapeo, lo cambiamos, si no, usamos el original en mayúsculas
     user.tessitura = mapeo.get(tessitura_mapeada, tessitura_mapeada)
 

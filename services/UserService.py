@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 import secrets
 
 from core.security import get_password_hash
-from core.security import verify_password, create_access_token # Asumiendo que tienes estas utilerías
+from core.security import verify_password, create_access_token
 from models.dto.response.UserLoginResponse import UserLoginResponse
 from models.dto.request.UserLoginRequest import UserLoginRequest
 from models.mappers.UserMapper import UserMapper
@@ -16,13 +16,15 @@ from models.mappers.UserConfigurationMapper import UserConfigurationMapper
 from models.dto.request.EmailVerificationRequest import EmailVerificationRequest
 from services.EmailService import EmailService
 
+
 class UserService:
     def __init__(self, db: Session):
         self.usuarioDao = UserDAO(db)
 
     @staticmethod
-    def _generar_codigo_verificacion() -> str:
-        return f"{secrets.randbelow(1_000_000):06d}"
+    def _generar_token_verificacion() -> str:
+        """Genera un token de un solo uso para confirmar el correo por enlace."""
+        return secrets.token_urlsafe(32)
 
     @staticmethod
     def _fecha_expiracion_codigo() -> datetime:
@@ -37,14 +39,14 @@ class UserService:
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="El correo electrónico ya está registrado."
             )
-        
-        # 2. Crear un código de un solo uso y almacenar únicamente su hash.
+
+        # 2. Crear un token de un solo uso y almacenar únicamente su hash.
         pwd_hash = get_password_hash(request.password)
-        verification_code = self._generar_codigo_verificacion()
+        verification_token = self._generar_token_verificacion()
         usuarioEntity = UserMapper.toEntity(
             request,
             pwd_hash,
-            get_password_hash(verification_code),
+            get_password_hash(verification_token),
             self._fecha_expiracion_codigo(),
         )
         usuarioEntity.user_configuration = UserConfigurationMapper.toEntity(request)
@@ -53,14 +55,14 @@ class UserService:
         usuarioSaved = self.usuarioDao.save(usuarioEntity)
 
         # 4. Enviar la confirmación después de persistir el usuario.
-        EmailService.send_verification_code(usuarioSaved.email, verification_code)
+        EmailService.send_verification_link(usuarioSaved.email, verification_token)
 
         # 5. Mapear a Response DTO
         return UserMapper.toDto(usuarioSaved)
-    
+
     def loginUsuario(self, request: UserLoginRequest) -> UserLoginResponse:
         usuarioBuscado = self.usuarioDao.getByEmail(request.email)
-        
+
         # 2. Verificar existencia y contraseña
         if not usuarioBuscado or not verify_password(request.password, usuarioBuscado.password_hash):
             raise HTTPException(
@@ -86,7 +88,7 @@ class UserService:
         if not usuario or not usuario.email_verification_code_hash:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="El código de confirmación no es válido."
+                detail="El enlace de confirmación no es válido."
             )
 
         if usuario.email_verified:
@@ -98,13 +100,13 @@ class UserService:
         ):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="El código de confirmación ha expirado. Solicita uno nuevo."
+                detail="El enlace de confirmación ha expirado. Solicita uno nuevo."
             )
 
-        if not verify_password(request.code, usuario.email_verification_code_hash):
+        if not verify_password(request.token, usuario.email_verification_code_hash):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="El código de confirmación no es válido."
+                detail="El enlace de confirmación no es válido."
             )
 
         usuario.email_verified = True
@@ -123,8 +125,8 @@ class UserService:
                 detail="El correo electrónico ya fue confirmado."
             )
 
-        verification_code = self._generar_codigo_verificacion()
-        usuario.email_verification_code_hash = get_password_hash(verification_code)
+        verification_token = self._generar_token_verificacion()
+        usuario.email_verification_code_hash = get_password_hash(verification_token)
         usuario.email_verification_expires_at = self._fecha_expiracion_codigo()
         self.usuarioDao.save(usuario)
-        EmailService.send_verification_code(usuario.email, verification_code)
+        EmailService.send_verification_link(usuario.email, verification_token)
