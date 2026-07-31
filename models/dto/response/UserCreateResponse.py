@@ -8,6 +8,7 @@ class UserCreateResponse(BaseModel):
     username: str
     email: EmailStr
     tessitura: Optional[Tessitura] = None
+    email_verified: bool
     configuration: Optional[UserConfigurationResponse] = None
 
     class Config:

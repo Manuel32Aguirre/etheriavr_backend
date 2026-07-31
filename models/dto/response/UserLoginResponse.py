@@ -10,4 +10,5 @@ class UserLoginResponse(BaseModel):
     username: str
     email: str
     tessitura: Optional[str] = None
+    email_verified: bool
     configuration: Optional[UserConfigurationResponse] = None

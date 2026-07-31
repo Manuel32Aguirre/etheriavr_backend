@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Enum as SQLEnum
+from sqlalchemy import Boolean, Column, DateTime, Integer, String, Enum as SQLEnum
 from sqlalchemy.orm import relationship
 from config.connection import Base
 from models.enums.Tessitura import Tessitura 
@@ -11,6 +11,9 @@ class User(Base):
     email = Column(String(100), nullable=False, unique=True)
     password_hash = Column(String(255), nullable=False)
     tessitura = Column(SQLEnum(Tessitura), nullable=True)
+    email_verified = Column(Boolean, nullable=False, default=False)
+    email_verification_code_hash = Column(String(255), nullable=True)
+    email_verification_expires_at = Column(DateTime, nullable=True)
 
     user_configuration = relationship(
         "UserConfiguration",

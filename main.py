@@ -1,4 +1,4 @@
-from sqlalchemy import text # Importante para ejecutar SQL puro
+from sqlalchemy import inspect, text # Importante para ejecutar SQL puro
 from config.connection import engine, Base, SessionLocal # <--- Agrega SessionLocal aquí
 from dotenv import load_dotenv
 from config.broadcast_service import start_udp_beacon
@@ -25,6 +25,28 @@ IS_DEPLOYMENT = _as_bool(os.getenv("IS_DEPLOYMENT"), default=False)
 ENABLE_UDP_BEACON = _as_bool(os.getenv("ENABLE_UDP_BEACON"), default=not IS_DEPLOYMENT)
 
 Base.metadata.create_all(bind=engine)
+
+
+def asegurar_campos_confirmacion_correo():
+    """Añade los campos de confirmación a instalaciones que ya tenían la tabla users."""
+    existing_columns = {
+        column["name"] for column in inspect(engine).get_columns("users")
+    }
+    required_columns = {
+        "email_verified": "BOOLEAN NOT NULL DEFAULT FALSE",
+        "email_verification_code_hash": "VARCHAR(255) NULL",
+        "email_verification_expires_at": "DATETIME NULL",
+    }
+
+    with engine.begin() as connection:
+        for column_name, definition in required_columns.items():
+            if column_name not in existing_columns:
+                connection.execute(
+                    text(f"ALTER TABLE users ADD COLUMN {column_name} {definition}")
+                )
+
+
+asegurar_campos_confirmacion_correo()
 
 
 def ejecutar_import_sql():

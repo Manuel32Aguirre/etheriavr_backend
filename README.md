@@ -21,3 +21,13 @@ IS_DEPLOYMENT=True
 ENABLE_UDP_BEACON=False
 DEBUG_MODE=False
 ```
+
+## Confirmación de correo electrónico
+
+Al registrar un usuario, el backend genera un código de seis dígitos, guarda solo su hash y lo envía por SMTP. El código expira según `EMAIL_VERIFICATION_CODE_EXPIRE_MINUTES` (15 minutos por defecto).
+
+- Página HTML: `/api/verify-email`.
+- API de confirmación: `POST /api/users/email-verification` con `email` y `code`.
+- Reenvío: `POST /api/users/email-verification/resend` con `email`.
+
+Para EC2, configura `APP_PUBLIC_URL` con el dominio HTTPS público del backend. La cuenta SMTP debe usar una contraseña de aplicación y `MAIL_USERNAME` debe ser el correo completo de la cuenta remitente. No subas el archivo [.env](.env) al repositorio.
