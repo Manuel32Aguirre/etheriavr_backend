@@ -5,6 +5,7 @@ from models.dto.request.UserConfigurationRequest import UserConfigurationRequest
 from models.dto.response.UserConfigurationResponse import UserConfigurationResponse
 from services.UserConfigurationService import UserConfigurationService
 from core.security import get_current_user
+from core.authorization import require_owner
 from models.entities.User import User
 
 
@@ -17,8 +18,10 @@ def getUserConfiguration(
     db: Session = Depends(obtenerBD),
     current_user: User = Depends(get_current_user),
 ):
+    # Prevención IDOR: cada usuario solo puede leer su propia configuración.
+    require_owner(user_id, current_user, entity_name="configuración")
     configuracionServicio = UserConfigurationService(db)
-    return configuracionServicio.obtenerConfiguracionUsuario(user_id)
+    return configuracionServicio.obtenerConfiguracionUsuario(current_user.id)
 
 
 @router.put("/{user_id}/configuration", response_model=UserConfigurationResponse)
@@ -28,5 +31,7 @@ def saveUserConfiguration(
     db: Session = Depends(obtenerBD),
     current_user: User = Depends(get_current_user),
 ):
+    # Prevención IDOR: cada usuario solo puede modificar su propia configuración.
+    require_owner(user_id, current_user, entity_name="configuración")
     configuracionServicio = UserConfigurationService(db)
-    return configuracionServicio.guardarConfiguracionUsuario(user_id, request)
+    return configuracionServicio.guardarConfiguracionUsuario(current_user.id, request)

@@ -15,6 +15,7 @@ from models.dto.request.EmailVerificationRequest import EmailVerificationRequest
 from models.dto.request.ResendEmailVerificationRequest import ResendEmailVerificationRequest
 from services.UserService import UserService
 from core.security import get_current_user
+from core.authorization import require_owner
 
 # Usamos un solo router para no causar conflictos de prefijos
 router = APIRouter(prefix="/api", tags=["Users"])
@@ -168,6 +169,9 @@ async def update_tessitura(
     db: Session = Depends(obtenerBD),
     current_user: User = Depends(get_current_user),
 ):
+    # Prevención IDOR: cada usuario solo puede modificar su propia tessitura.
+    require_owner(user_id, current_user, entity_name="usuario")
+
     # 1. Buscar al usuario en la base de datos usando la entidad User
     user = db.query(User).filter(User.id == user_id).first()
 

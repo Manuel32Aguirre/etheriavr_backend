@@ -6,6 +6,7 @@ from models.dto.response.PracticeSessionResponse import PracticeSessionResponse
 from services.PracticeSessionService import PracticeSessionService
 from typing import List
 from core.security import get_current_user
+from core.authorization import require_owner
 from models.entities.User import User
 
 router = APIRouter(prefix="/api/practice-sessions", tags=["Practice Sessions"])
@@ -17,9 +18,11 @@ def createPracticeSession(
     db: Session = Depends(obtenerBD),
     current_user: User = Depends(get_current_user),
 ):
+    # Prevención IDOR: la sesión de práctica SIEMPRE pertenece al usuario
+    # autenticado, ignorando cualquier user_id que venga en el body.
+    request.user_id = current_user.id
     sesionServicio = PracticeSessionService(db)
     return sesionServicio.registrarSesionPractica(request)
-
 
 
 @router.get("/user/{user_id}", response_model=List[PracticeSessionResponse])
@@ -28,5 +31,7 @@ def getPracticeSessionsByUser(
     db: Session = Depends(obtenerBD),
     current_user: User = Depends(get_current_user),
 ):
+    # Prevención IDOR: solo se permite consultar las sesiones del propio usuario.
+    require_owner(user_id, current_user, entity_name="usuario")
     sesionServicio = PracticeSessionService(db)
-    return sesionServicio.obtenerSesionesPorUsuario(user_id)
+    return sesionServicio.obtenerSesionesPorUsuario(current_user.id)
