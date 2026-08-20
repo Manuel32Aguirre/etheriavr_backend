@@ -1,4 +1,11 @@
-INSERT INTO artists (id, name) VALUES (1, 'A-ha'); 
+-- Homogeneiza file_path (solo nombre de archivo) y deja piano en MIDI.
+-- Ejecutar manualmente si la BD ya tenía datos (import.sql solo corre con tabla vacía).
+
+DELETE FROM practice_sessions;
+DELETE FROM songs;
+DELETE FROM artists;
+
+INSERT INTO artists (id, name) VALUES (1, 'A-ha');
 INSERT INTO artists (id, name) VALUES (2, 'Alex North');
 INSERT INTO artists (id, name) VALUES (3, 'Beethoven');
 INSERT INTO artists (id, name) VALUES (4, 'Elton John');
@@ -9,10 +16,7 @@ INSERT INTO artists (id, name) VALUES (8, 'Green Day');
 INSERT INTO artists (id, name) VALUES (9, 'Soda Stereo');
 INSERT INTO artists (id, name) VALUES (10, 'Coldplay');
 
--- file_path = solo el nombre del archivo. Cada modo resuelve su carpeta en el cliente:
---   PIANO -> StreamingAssets/PianoSongs/Songs/{file_path}
---   CANTO -> StreamingAssets/SingSongs/Songs/{basename}.json + .wav
-INSERT INTO songs (musical_genre, musical_key, title, duration, mode, tempo, file_path, artist_id) VALUES 
+INSERT INTO songs (musical_genre, musical_key, title, duration, mode, tempo, file_path, artist_id) VALUES
 ('Synth-Pop', 'A', 'Take On Me', 229, 'CANTO', 169, 'take_on_me.json', 1),
 ('Punk', 'Fm', 'Boulevard Of Broken Dreams', 167, 'CANTO', 170, 'boulevard_of_broken_dreams.json', 8),
 ('Pop', 'Bm', 'Rosa Pastel', 212, 'CANTO', 128, 'rosa_pastel.json', 6),
