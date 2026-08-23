@@ -1,6 +1,6 @@
 INSERT INTO artists (id, name) VALUES (1, 'A-ha'); 
 INSERT INTO artists (id, name) VALUES (2, 'Alex North');
-INSERT INTO artists (id, name) VALUES (3, 'Beethoven');
+INSERT INTO artists (id, name) VALUES (3, 'Ludwig van Beethoven');
 INSERT INTO artists (id, name) VALUES (4, 'Elton John');
 INSERT INTO artists (id, name) VALUES (5, 'Caifanes');
 INSERT INTO artists (id, name) VALUES (6, 'Belanova');
@@ -17,6 +17,6 @@ INSERT INTO songs (musical_genre, musical_key, title, duration, mode, tempo, fil
 ('Punk', 'Fm', 'Boulevard Of Broken Dreams', 167, 'CANTO', 170, 'boulevard_of_broken_dreams.json', 8),
 ('Pop', 'Bm', 'Rosa Pastel', 212, 'CANTO', 128, 'rosa_pastel.json', 6),
 ('Jazz', 'C', 'Dream a Little Dream', 213, 'CANTO', 77, 'dream_a_little_dream.json', 7),
-('Classical', 'Am', 'Fur Elise', 180, 'PIANO', 72, 'furelise.mid', 3),
-('Classical', 'C#m', 'Moonlight Sonata', 306, 'PIANO', 55, 'moonlightSonata.mid', 3),
-('Classical', 'C', 'Himno a la Alegria', 32, 'PIANO', 120, 'himnoALaAlegria.mid', 3);
+('Classical', 'Am', 'Für Elise', 231, 'PIANO', 98, 'furelise.mid', 3),
+('Classical', 'C#m', 'Moonlight Sonata', 307, 'PIANO', 55, 'moonlightSonata.mid', 3),
+('Classical', 'C', 'Himno a la Alegria', 32, 'PIANO', 60, 'himnoALaAlegria.mid', 3);
