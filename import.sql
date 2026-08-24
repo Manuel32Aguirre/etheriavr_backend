@@ -19,4 +19,6 @@ INSERT INTO songs (musical_genre, musical_key, title, duration, mode, tempo, fil
 ('Jazz', 'C', 'Dream a Little Dream', 213, 'CANTO', 77, 'dream_a_little_dream.json', 7),
 ('Classical', 'Am', 'Für Elise', 231, 'PIANO', 98, 'furelise.mid', 3),
 ('Classical', 'C#m', 'Moonlight Sonata', 307, 'PIANO', 55, 'moonlightSonata.mid', 3),
-('Classical', 'C', 'Himno a la Alegria', 32, 'PIANO', 60, 'himnoALaAlegria.mid', 3);
+('Classical', 'C', 'Himno a la Alegria', 32, 'PIANO', 60, 'himnoALaAlegria.mid', 3),
+('Rock Alternativo', 'F', 'The Scientist', 264, 'PIANO', 73, 'thescientist.mid', 10),
+('Rock', 'D', 'Persiana Americana', 312, 'PIANO', 101, 'persianaamericana.mid', 9);
