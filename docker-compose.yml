@@ -37,7 +37,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 400M
+          memory: 4096M
 
 volumes:
   etherivr_db_data:

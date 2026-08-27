@@ -9,3 +9,6 @@ passlib[bcrypt]==1.7.4
 email-validator
 python-jose[cryptography]
 python-multipart
+numpy
+soundfile
+demucs

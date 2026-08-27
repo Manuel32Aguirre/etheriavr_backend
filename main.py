@@ -10,7 +10,14 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware 
 
 from config.connection import engine, Base
-from controllers import UserController, SongController, UserConfigurationController, PracticeSessionController
+from controllers import (
+    UserController,
+    SongController,
+    UserConfigurationController,
+    PracticeSessionController,
+    AudioSeparationController,
+)
+from services.AudioSeparationService import AudioSeparationService
 
 
 def _as_bool(value, default=False):
@@ -92,6 +99,7 @@ app.include_router(UserController.router)
 app.include_router(SongController.router) # <--- ¡ESTA ES LA CLAVE!
 app.include_router(UserConfigurationController.router)
 app.include_router(PracticeSessionController.router)
+app.include_router(AudioSeparationController.router)
 
 
 @app.get("/")
@@ -103,7 +111,7 @@ def root():
 
 @app.get("/health")
 def health_check():
-    return {"status": "healthy"}
+    return AudioSeparationService.health_payload()
 
 def main():
     if ENABLE_UDP_BEACON:
