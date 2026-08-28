@@ -14,6 +14,15 @@ ENV/
 .env
 .env.local
 .env.secret
+.env.*
+!.env.example
+
+# Historial de chats / notas locales (pueden contener credenciales)
+.specstory/
+claves.txt
+claves.*
+*.secrets
+*.credentials
 
 .vscode/
 .vs/
