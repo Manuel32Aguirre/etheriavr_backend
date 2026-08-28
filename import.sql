@@ -10,7 +10,7 @@ INSERT INTO artists (id, name) VALUES (9, 'Soda Stereo');
 INSERT INTO artists (id, name) VALUES (10, 'Coldplay');
 
 -- file_path = solo el nombre del archivo. Cada modo resuelve su carpeta en el cliente:
---   PIANO -> StreamingAssets/PianoSongs/Songs/{file_path}
+--   PIANO -> StreamingAssets/PianoSongs/Songs/{file_path} ej
 --   CANTO -> StreamingAssets/SingSongs/Songs/{basename}.json + .wav
 INSERT INTO songs (musical_genre, musical_key, title, duration, mode, tempo, file_path, artist_id) VALUES 
 ('Synth-Pop', 'A', 'Take On Me', 229, 'CANTO', 169, 'take_on_me.json', 1),
